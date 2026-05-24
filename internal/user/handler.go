@@ -15,7 +15,10 @@ func NewHandler(service Service) *Handler {
 }
 
 func (h *Handler) GetProfile(c *fiber.Ctx) error {
-	userID := c.Locals("user_id").(string)
+	userID, ok := c.Locals("user_id").(string)
+	if !ok {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "unauthorized"})
+	}
 
 	user, err := h.service.GetProfile(userID)
 	if err != nil {
@@ -29,7 +32,10 @@ func (h *Handler) GetProfile(c *fiber.Ctx) error {
 }
 
 func (h *Handler) UpdateProfile(c *fiber.Ctx) error {
-	userID := c.Locals("user_id").(string)
+	userID, ok := c.Locals("user_id").(string)
+	if !ok {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "unauthorized"})
+	}
 
 	var input domain.UpdateUserInput
 	if err := c.BodyParser(&input); err != nil {
@@ -80,8 +86,11 @@ func (h *Handler) DeleteUser(c *fiber.Ctx) error {
 	return c.SendStatus(fiber.StatusNoContent)
 }
 
-func RegisterRoutes(r fiber.Router, handler *Handler, authMiddleware, adminMiddleware fiber.Handler) {
+func RegisterRoutes(r fiber.Router, handler *Handler, authMiddleware, adminMiddleware fiber.Handler, middlewares ...fiber.Handler) {
 	users := r.Group("/users")
+	for _, m := range middlewares {
+		users.Use(m)
+	}
 
 	users.Get("/me", authMiddleware, handler.GetProfile)
 	users.Put("/me", authMiddleware, handler.UpdateProfile)

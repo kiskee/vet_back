@@ -1,6 +1,8 @@
 package router
 
 import (
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 
@@ -24,6 +26,10 @@ func Setup(app *fiber.App, deps *Dependencies) {
 	authMiddleware := middleware.AuthRequired(deps.JWTSecret)
 	adminMiddleware := middleware.RoleRequired(domain.RoleAdmin)
 
-	auth.RegisterRoutes(api, deps.AuthHandler)
-	userHandlerPkg.RegisterRoutes(api, deps.UserHandler, authMiddleware, adminMiddleware)
+	auth.RegisterRoutes(api, deps.AuthHandler,
+		middleware.RateLimit(10, time.Minute),
+	)
+	userHandlerPkg.RegisterRoutes(api, deps.UserHandler, authMiddleware, adminMiddleware,
+		middleware.RateLimit(30, time.Minute),
+	)
 }

@@ -75,8 +75,11 @@ func (h *Handler) Refresh(c *fiber.Ctx) error {
 	return c.JSON(result)
 }
 
-func RegisterRoutes(r fiber.Router, handler *Handler) {
+func RegisterRoutes(r fiber.Router, handler *Handler, middlewares ...fiber.Handler) {
 	auth := r.Group("/auth")
+	for _, m := range middlewares {
+		auth.Use(m)
+	}
 
 	auth.Post("/register", handler.Register)
 	auth.Post("/login", handler.Login)
