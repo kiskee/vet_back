@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 
 	"github.com/danielm/app_sara_backend/internal/domain"
+	"github.com/danielm/app_sara_backend/internal/middleware"
 )
 
 type Handler struct {
@@ -24,11 +25,8 @@ func (h *Handler) Register(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid body"})
 	}
 
-	if input.Name == "" || input.Email == "" || input.Password == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "name, email and password are required"})
-	}
-	if input.Role != domain.RoleUser && input.Role != domain.RoleVeterinarian && input.Role != domain.RoleAdmin {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "role must be 'user', 'veterinarian' or 'admin'"})
+	if err := middleware.ValidateStruct(&input); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
 	result, err := h.service.Register(input)
@@ -45,8 +43,8 @@ func (h *Handler) Login(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid body"})
 	}
 
-	if input.Email == "" || input.Password == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "email and password are required"})
+	if err := middleware.ValidateStruct(&input); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
 	result, err := h.service.Login(input)

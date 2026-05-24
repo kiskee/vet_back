@@ -1,6 +1,7 @@
 package config
 
 import (
+	"log"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -17,13 +18,22 @@ type Config struct {
 func Load() *Config {
 	godotenv.Load()
 
-	return &Config{
+	cfg := &Config{
 		DatabaseURL:      getEnv("DATABASE_URL", "postgres://postgres:postgres@localhost:5432/app_sara?sslmode=disable"),
-		JWTSecret:        getEnv("JWT_SECRET", "secret"),
-		JWTRefreshSecret: getEnv("JWT_REFRESH_SECRET", "refresh-secret"),
+		JWTSecret:        os.Getenv("JWT_SECRET"),
+		JWTRefreshSecret: os.Getenv("JWT_REFRESH_SECRET"),
 		Port:             getEnv("PORT", "3000"),
-		AdminSecret:      getEnv("ADMIN_SECRET", ""),
+		AdminSecret:      os.Getenv("ADMIN_SECRET"),
 	}
+
+	if cfg.JWTSecret == "" {
+		log.Fatal("JWT_SECRET is required")
+	}
+	if cfg.JWTRefreshSecret == "" {
+		log.Fatal("JWT_REFRESH_SECRET is required")
+	}
+
+	return cfg
 }
 
 func getEnv(key, fallback string) string {
