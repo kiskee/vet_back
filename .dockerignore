@@ -1,0 +1,5 @@
+.env
+.git
+.gitignore
+*.md
+app_sara.postman_collection.json
