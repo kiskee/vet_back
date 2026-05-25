@@ -19,7 +19,7 @@ func Load() *Config {
 	godotenv.Load()
 
 	cfg := &Config{
-		DatabaseURL:      getEnv("DATABASE_URL", "postgres://postgres:postgres@localhost:5432/app_sara?sslmode=disable"),
+		DatabaseURL:      getEnv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/app_sara?sslmode=disable"),
 		JWTSecret:        os.Getenv("JWT_SECRET"),
 		JWTRefreshSecret: os.Getenv("JWT_REFRESH_SECRET"),
 		Port:             getEnv("PORT", "3000"),
