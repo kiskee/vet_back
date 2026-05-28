@@ -30,6 +30,13 @@ func main() {
 	}
 	defer sqlDB.Close()
 
+	rdb, err := database.NewRedisClient(cfg.RedisURL)
+	if err != nil {
+		log.Fatalf("failed to connect to redis: %v", err)
+	}
+	defer rdb.Close()
+	log.Println("connected to redis")
+
 	userRepo := userHandlerPkg.NewRepository(db)
 	userService := userHandlerPkg.NewService(userRepo)
 	userHandler := userHandlerPkg.NewHandler(userService)

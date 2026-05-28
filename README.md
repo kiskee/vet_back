@@ -136,6 +136,40 @@ POST /api/v1/auth/login
 Authorization: Bearer <access_token>
 ```
 
+## Roadmap — Próximos módulos
+
+```
+Fase 1: Infraestructura
+  - Redis (go-redis)
+  - WebSocket (gofiber/contrib/websocket)
+  - golang-migrate + migrations/
+  - PostGIS extension en PostgreSQL
+
+Fase 2: Módulos base
+  - services — catálogo de servicios CRUD
+  - vets — perfil, disponibilidad, ubicación GPS
+
+Fase 3: Core
+  - requests — state machine (PENDING → SEARCHING → ASSIGNED → ...)
+  - matching engine — búsqueda de vet por radio + Haversine/PostGIS
+  - WebSocket Hub — canales client/vet con eventos en tiempo real
+
+Fase 4: Tiempo real + extras
+  - location tracking — GPS cada 5s
+  - push notifications (FCM)
+  - Redis Pub/Sub — comunicación entre instancias
+```
+
 ## Postman
 
 Colección incluida: `app_sara.postman_collection.json`
+
+
+docker build -t vet_back .
+
+ docker run -d --name vet_back --restart unless-stopped -p 3000:3000 --env-file .env vet_back
+
+ docker logs vet_back
+
+ docker compose up -d
+ go run ./cmd/server

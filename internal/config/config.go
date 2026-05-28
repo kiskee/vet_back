@@ -9,6 +9,7 @@ import (
 
 type Config struct {
 	DatabaseURL       string
+	RedisURL          string
 	JWTSecret         string
 	JWTRefreshSecret  string
 	Port              string
@@ -20,6 +21,7 @@ func Load() *Config {
 
 	cfg := &Config{
 		DatabaseURL:      getEnv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/app_sara?sslmode=disable"),
+		RedisURL:         getEnv("REDIS_URL", "redis://localhost:6379/0"),
 		JWTSecret:        os.Getenv("JWT_SECRET"),
 		JWTRefreshSecret: os.Getenv("JWT_REFRESH_SECRET"),
 		Port:             getEnv("PORT", "3000"),
