@@ -13,6 +13,7 @@ import (
 	"github.com/danielm/app_sara_backend/internal/database"
 	"github.com/danielm/app_sara_backend/internal/router"
 	userHandlerPkg "github.com/danielm/app_sara_backend/internal/user"
+	"github.com/danielm/app_sara_backend/internal/websocket"
 )
 
 func main() {
@@ -44,6 +45,9 @@ func main() {
 	authService := auth.NewService(userRepo, cfg.JWTSecret, cfg.JWTRefreshSecret, cfg.AdminSecret)
 	authHandler := auth.NewHandler(authService)
 
+	wsHub := websocket.NewHub()
+	wsHandler := websocket.NewHandler(wsHub)
+
 	app := fiber.New(fiber.Config{
 		AppName: "app_sara_backend",
 	})
@@ -51,6 +55,7 @@ func main() {
 	deps := &router.Dependencies{
 		AuthHandler: authHandler,
 		UserHandler: userHandler,
+		WSHandler:   wsHandler,
 		JWTSecret:   cfg.JWTSecret,
 	}
 
