@@ -136,6 +136,21 @@ POST /api/v1/auth/login
 Authorization: Bearer <access_token>
 ```
 
+## Migraciones
+
+Las migraciones SQL están en [`internal/database/migrations/`](./internal/database/migrations/). Se ejecutan automáticamente al iniciar el servidor (embebidas en el binario via `//go:embed`).
+
+```bash
+# Crear nueva migración
+migrate create -ext sql -dir internal/database/migrations -seq nombre_de_la_migracion
+
+# Ejecutar manualmente (opcional, el server las corre automático)
+migrate -path internal/database/migrations -database "$DATABASE_URL" up
+
+# Revertir una
+migrate -path internal/database/migrations -database "$DATABASE_URL" down 1
+```
+
 ## Roadmap — Próximos módulos
 
 ```
@@ -173,3 +188,7 @@ docker build -t vet_back .
 
  docker compose up -d
  go run ./cmd/server
+
+ docker compose up --build
+ docker compose down
+ docker system prune -a --volumes
