@@ -192,3 +192,11 @@ docker build -t vet_back .
  docker compose up --build
  docker compose down
  docker system prune -a --volumes
+
+ docker compose build
+ docker tag app-sara-backend veteappi/app-sara-backend:latest
+ docker push veteappi/app-sara-backend:latest
+
+ //en ec2
+ docker compose pull
+ docker compose up -d

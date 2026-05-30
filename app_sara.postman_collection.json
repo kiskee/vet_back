@@ -239,6 +239,104 @@
 			]
 		},
 		{
+			"name": "Services",
+			"item": [
+				{
+					"name": "List Services",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{"key": "token", "value": "{{access_token}}", "type": "string"}]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/services",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["api", "v1", "services"]
+						}
+					}
+				},
+				{
+					"name": "Get Service by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{"key": "token", "value": "{{access_token}}", "type": "string"}]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/services/{{service_id}}",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["api", "v1", "services", "{{service_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Create Service (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{"key": "token", "value": "{{access_token}}", "type": "string"}]
+						},
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Consulta General\",\n  \"description\": \"Revisión completa de tu mascota\",\n  \"price\": 350.00,\n  \"duration\": 30,\n  \"category\": \"consulta\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/services",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["api", "v1", "services"]
+						}
+					}
+				},
+				{
+					"name": "Update Service (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{"key": "token", "value": "{{access_token}}", "type": "string"}]
+						},
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Consulta General Premium\",\n  \"price\": 450.00\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/services/{{service_id}}",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["api", "v1", "services", "{{service_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Delete Service (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{"key": "token", "value": "{{access_token}}", "type": "string"}]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/services/{{service_id}}",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["api", "v1", "services", "{{service_id}}"]
+						}
+					}
+				}
+			]
+		},
+		{
 			"name": "Users",
 			"item": [
 				{
@@ -425,6 +523,11 @@
 		},
 		{
 			"key": "user_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "service_id",
 			"value": "",
 			"type": "string"
 		}

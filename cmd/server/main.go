@@ -12,6 +12,7 @@ import (
 	"github.com/danielm/app_sara_backend/internal/config"
 	"github.com/danielm/app_sara_backend/internal/database"
 	"github.com/danielm/app_sara_backend/internal/router"
+	servicesPkg "github.com/danielm/app_sara_backend/internal/services"
 	userHandlerPkg "github.com/danielm/app_sara_backend/internal/user"
 	"github.com/danielm/app_sara_backend/internal/websocket"
 )
@@ -45,6 +46,10 @@ func main() {
 	authService := auth.NewService(userRepo, cfg.JWTSecret, cfg.JWTRefreshSecret, cfg.AdminSecret)
 	authHandler := auth.NewHandler(authService)
 
+	servicesRepo := servicesPkg.NewRepository(db)
+	servicesService := servicesPkg.NewService(servicesRepo)
+	servicesHandler := servicesPkg.NewHandler(servicesService)
+
 	wsHub := websocket.NewHub()
 	wsHandler := websocket.NewHandler(wsHub)
 
@@ -53,10 +58,11 @@ func main() {
 	})
 
 	deps := &router.Dependencies{
-		AuthHandler: authHandler,
-		UserHandler: userHandler,
-		WSHandler:   wsHandler,
-		JWTSecret:   cfg.JWTSecret,
+		AuthHandler:    authHandler,
+		UserHandler:    userHandler,
+		ServicesHandler: servicesHandler,
+		WSHandler:      wsHandler,
+		JWTSecret:      cfg.JWTSecret,
 	}
 
 	router.Setup(app, deps)
