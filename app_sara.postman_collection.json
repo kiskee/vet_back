@@ -239,6 +239,130 @@
 			]
 		},
 		{
+			"name": "Vets",
+			"item": [
+				{
+					"name": "List Vets",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{"key": "token", "value": "{{access_token}}", "type": "string"}]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/vets",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["api", "v1", "vets"]
+						}
+					}
+				},
+				{
+					"name": "List Vets Near",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{"key": "token", "value": "{{access_token}}", "type": "string"}]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/vets?lat=19.43&lng=-99.13&radius=5000",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["api", "v1", "vets"],
+							"query": [
+								{"key": "lat", "value": "19.43"},
+								{"key": "lng", "value": "-99.13"},
+								{"key": "radius", "value": "5000"}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Vet by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{"key": "token", "value": "{{access_token}}", "type": "string"}]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/vets/{{vet_id}}",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["api", "v1", "vets", "{{vet_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Update Vet Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{"key": "token", "value": "{{access_token}}", "type": "string"}]
+						},
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Veterinario especialista en pequeños animales\",\n  \"clinic_name\": \"Clínica Sara Mascotas\",\n  \"consultation_fee\": 500.00,\n  \"max_concurrent\": 2\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/vets/{{vet_id}}",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["api", "v1", "vets", "{{vet_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Update Vet Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{"key": "token", "value": "{{access_token}}", "type": "string"}]
+						},
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"available\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/vets/{{vet_id}}/status",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["api", "v1", "vets", "{{vet_id}}", "status"]
+						}
+					}
+				},
+				{
+					"name": "Update Vet Location",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{"key": "token", "value": "{{access_token}}", "type": "string"}]
+						},
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"lat\": 19.4326,\n  \"lng\": -99.1332\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/vets/{{vet_id}}/location",
+							"host": ["localhost"],
+							"port": "3000",
+							"path": ["api", "v1", "vets", "{{vet_id}}", "location"]
+						}
+					}
+				}
+			]
+		},
+		{
 			"name": "Services",
 			"item": [
 				{
@@ -528,6 +652,11 @@
 		},
 		{
 			"key": "service_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "vet_id",
 			"value": "",
 			"type": "string"
 		}

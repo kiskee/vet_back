@@ -11,17 +11,19 @@ import (
 	"github.com/danielm/app_sara_backend/internal/middleware"
 	servicesPkg "github.com/danielm/app_sara_backend/internal/services"
 	userHandlerPkg "github.com/danielm/app_sara_backend/internal/user"
+	vetsPkg "github.com/danielm/app_sara_backend/internal/vets"
 	wsapp "github.com/danielm/app_sara_backend/internal/websocket"
 
 	"github.com/danielm/app_sara_backend/internal/domain"
 )
 
 type Dependencies struct {
-	AuthHandler    *auth.Handler
-	UserHandler    *userHandlerPkg.Handler
+	AuthHandler     *auth.Handler
+	UserHandler     *userHandlerPkg.Handler
 	ServicesHandler *servicesPkg.Handler
-	WSHandler      *wsapp.Handler
-	JWTSecret      string
+	VetsHandler     *vetsPkg.Handler
+	WSHandler       *wsapp.Handler
+	JWTSecret       string
 }
 
 func Setup(app *fiber.App, deps *Dependencies) {
@@ -38,6 +40,9 @@ func Setup(app *fiber.App, deps *Dependencies) {
 		middleware.RateLimit(30, time.Minute),
 	)
 	servicesPkg.RegisterRoutes(api, deps.ServicesHandler, authMiddleware, adminMiddleware,
+		middleware.RateLimit(30, time.Minute),
+	)
+	vetsPkg.RegisterRoutes(api, deps.VetsHandler, authMiddleware, adminMiddleware,
 		middleware.RateLimit(30, time.Minute),
 	)
 

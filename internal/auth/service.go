@@ -11,6 +11,7 @@ import (
 
 	"github.com/danielm/app_sara_backend/internal/domain"
 	userRepoPkg "github.com/danielm/app_sara_backend/internal/user"
+	vetRepoPkg "github.com/danielm/app_sara_backend/internal/vets"
 )
 
 type Service interface {
@@ -21,14 +22,16 @@ type Service interface {
 
 type service struct {
 	userRepo         userRepoPkg.Repository
+	vetRepo          vetRepoPkg.Repository
 	jwtSecret        string
 	jwtRefreshSecret string
 	adminSecret      string
 }
 
-func NewService(userRepo userRepoPkg.Repository, jwtSecret, jwtRefreshSecret, adminSecret string) Service {
+func NewService(userRepo userRepoPkg.Repository, vetRepo vetRepoPkg.Repository, jwtSecret, jwtRefreshSecret, adminSecret string) Service {
 	return &service{
 		userRepo:         userRepo,
+		vetRepo:          vetRepo,
 		jwtSecret:        jwtSecret,
 		jwtRefreshSecret: jwtRefreshSecret,
 		adminSecret:      adminSecret,
@@ -70,6 +73,15 @@ func (s *service) Register(input domain.RegisterInput) (*domain.AuthResponse, er
 
 	if err := s.userRepo.Create(user); err != nil {
 		return nil, fmt.Errorf("create user: %w", err)
+	}
+
+	if input.Role == domain.RoleVeterinarian {
+		if err := s.vetRepo.Create(&domain.Vet{
+			UserID: user.ID,
+			Status: "offline",
+		}); err != nil {
+			return nil, fmt.Errorf("create vet profile: %w", err)
+		}
 	}
 
 	tokens, err := s.generateTokens(user)
